@@ -1,0 +1,80 @@
+0 info it worked if it ends with ok
+1 verbose cli [
+1 verbose cli   'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Users\\Vedant Kandge\\AppData\\Roaming\\npm\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'i',
+1 verbose cli   'express',
+1 verbose cli   'body-parser',
+1 verbose cli   'mongoose',
+1 verbose cli   'ejs',
+1 verbose cli   'lodash',
+1 verbose cli   'express-session',
+1 verbose cli   'passport',
+1 verbose cli   'passport-local-mongoose',
+1 verbose cli   'passport-google-oauth20',
+1 verbose cli   'mongoose-findorcreate',
+1 verbose cli   'passpot-local',
+1 verbose cli   'dotenv'
+1 verbose cli ]
+2 info using npm@6.14.5
+3 info using node@v12.16.3
+4 verbose npm-session f417286c755bec66
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 http fetch GET 200 https://registry.npmjs.org/express-session 1173ms
+8 http fetch GET 200 https://registry.npmjs.org/passport-google-oauth20 1175ms
+9 http fetch GET 200 https://registry.npmjs.org/lodash 1186ms
+10 http fetch GET 200 https://registry.npmjs.org/ejs 1190ms
+11 http fetch GET 200 https://registry.npmjs.org/mongoose-findorcreate 1176ms
+12 http fetch GET 200 https://registry.npmjs.org/body-parser 1195ms
+13 http fetch GET 200 https://registry.npmjs.org/passport 1195ms
+14 http fetch GET 200 https://registry.npmjs.org/passport-local-mongoose 1251ms
+15 http fetch GET 200 https://registry.npmjs.org/express 1306ms
+16 http fetch GET 200 https://registry.npmjs.org/passport-google-oauth20/-/passport-google-oauth20-2.0.0.tgz 505ms
+17 http fetch GET 200 https://registry.npmjs.org/express-session/-/express-session-1.17.1.tgz 519ms
+18 http fetch GET 200 https://registry.npmjs.org/mongoose-findorcreate/-/mongoose-findorcreate-3.0.0.tgz 506ms
+19 http fetch GET 200 https://registry.npmjs.org/passport/-/passport-0.4.1.tgz 459ms
+20 http fetch GET 200 https://registry.npmjs.org/ejs/-/ejs-3.1.2.tgz 514ms
+21 http fetch GET 200 https://registry.npmjs.org/express/-/express-4.17.1.tgz 417ms
+22 http fetch GET 200 https://registry.npmjs.org/body-parser/-/body-parser-1.19.0.tgz 513ms
+23 http fetch GET 200 https://registry.npmjs.org/passport-local-mongoose/-/passport-local-mongoose-6.0.1.tgz 460ms
+24 silly pacote tag manifest for mongoose-findorcreate@latest fetched in 1747ms
+25 silly pacote tag manifest for passport@latest fetched in 1769ms
+26 silly pacote tag manifest for ejs@latest fetched in 1778ms
+27 silly pacote tag manifest for express@latest fetched in 1813ms
+28 silly pacote tag manifest for passport-google-oauth20@latest fetched in 1774ms
+29 silly pacote tag manifest for body-parser@latest fetched in 1790ms
+30 silly pacote tag manifest for express-session@latest fetched in 1780ms
+31 silly pacote tag manifest for passport-local-mongoose@latest fetched in 1777ms
+32 http fetch GET 200 https://registry.npmjs.org/lodash/-/lodash-4.17.15.tgz 665ms
+33 http fetch GET 200 https://registry.npmjs.org/mongoose 1878ms
+34 silly pacote tag manifest for lodash@latest fetched in 1916ms
+35 http fetch GET 200 https://registry.npmjs.org/dotenv 210ms
+36 http fetch GET 200 https://registry.npmjs.org/dotenv/-/dotenv-8.2.0.tgz 192ms
+37 silly pacote tag manifest for dotenv@latest fetched in 421ms
+38 http fetch GET 404 https://registry.npmjs.org/passpot-local 927ms
+39 http fetch GET 200 https://registry.npmjs.org/mongoose/-/mongoose-5.9.13.tgz 839ms
+40 silly pacote tag manifest for mongoose@latest fetched in 2755ms
+41 http fetch GET 404 https://registry.npmjs.org/passpot-local 946ms
+42 silly fetchPackageMetaData error for passpot-local@latest 404 Not Found - GET https://registry.npmjs.org/passpot-local - Not found
+43 timing stage:rollbackFailedOptional Completed in 1ms
+44 timing stage:runTopLevelLifecycles Completed in 3754ms
+45 verbose stack Error: 404 Not Found - GET https://registry.npmjs.org/passpot-local - Not found
+45 verbose stack     at C:\Users\Vedant Kandge\AppData\Roaming\npm\node_modules\npm\node_modules\npm-registry-fetch\check-response.js:104:15
+45 verbose stack     at runMicrotasks (<anonymous>)
+45 verbose stack     at processTicksAndRejections (internal/process/task_queues.js:97:5)
+46 verbose statusCode 404
+47 verbose pkgid passpot-local@latest
+48 verbose cwd C:\Users\Vedant Kandge\Desktop\PPL Project
+49 verbose Windows_NT 10.0.18362
+50 verbose argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Users\\Vedant Kandge\\AppData\\Roaming\\npm\\node_modules\\npm\\bin\\npm-cli.js" "i" "express" "body-parser" "mongoose" "ejs" "lodash" "express-session" "passport" "passport-local-mongoose" "passport-google-oauth20" "mongoose-findorcreate" "passpot-local" "dotenv"
+51 verbose node v12.16.3
+52 verbose npm  v6.14.5
+53 error code E404
+54 error 404 Not Found - GET https://registry.npmjs.org/passpot-local - Not found
+55 error 404
+56 error 404 'passpot-local@latest' is not in the npm registry.
+57 error 404 You should bug the author to publish it (or use the name yourself!)
+58 error 404 Note that you can also install from a
+59 error 404 tarball, folder, http url, or git url.
+60 verbose exit [ 1, true ]
