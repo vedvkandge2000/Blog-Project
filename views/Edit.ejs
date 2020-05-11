@@ -1,0 +1,22 @@
+<%- include('partials/header'); -%>
+
+<h1>Compose</h1>
+<form class="" action="/edit" method="post">
+  <div class="form-group">
+      <label for="forTitle">Title</label>
+      <input type="text" class="form-control" name="title" id="forTitle" value="<%= previousTitle %>">
+    </div>
+    <div class="form-group">
+        <label for="forimg">Image URL</label>
+        <input type="text" class="form-control" name="img" id="forimg" value="<%= previousUrl %>">
+      </div>
+    <div class="form-group">
+    <label for="forPost">Post</label>
+    <textarea class="form-control" id="forPost" name="post" rows="15" cols="30"><%= previouscontent %></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary" name="buttom">Publish</button>
+  <input type="hidden" name="id" value="<%= postId %>">
+</form>
+
+
+<%- include('partials/footer'); -%>

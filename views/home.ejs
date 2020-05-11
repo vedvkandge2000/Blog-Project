@@ -1,0 +1,66 @@
+<%- include('partials/header'); -%>
+
+
+
+
+  <div class="row justify-content-cente" style="padding: 10px;">
+  <div class="col-md-8" >
+<% posts.forEach(function(post) { %>
+  <div class="card mb-4">
+          <img class="card-img-top" src=<%= post.imgUrl %> alt="Card image cap">
+          <div class="card-body">
+            <h2 class="card-title"><%= post.title %></h2>
+            <p class="card-text"><%= post.content.substring(0,200) + " ..." %></p>
+            <form  action="/posts/<%= post._id %>" method="post">
+              <button class="btn btn-primary" type="submit" name="button" value="home">Read More</button>
+            </form>
+            <!-- <a href="/posts/<%= post._id %>" class="btn btn-primary">Read More</a> -->
+            <!-- <input type="hidden" name="pageName" value="home"> -->
+          </div>
+          <div class="card-footer text-muted">
+            Posted on January 1, 2017 by
+            <a href="#">Start Bootstrap</a>
+          </div>
+        </div>
+<% }) %>
+
+</div>
+<div class="col-md-4">
+
+        <!-- Search Widget -->
+        <div class="card my-4 card-2">
+          <div class="top-2">
+          <h5 class="name">Search</h5>
+          </div>
+          <div class="card-body">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search for...">
+              <span class="input-group-btn">
+                <button class="btn btn-secondary" type="button">Go!</button>
+              </span>
+            </div>
+          </div>
+        </div>
+        <!-- Profile Widget -->
+        <div class="card-1">
+          <div class="top">
+            <h2 class="name">Profile Name</h2>
+            <img class="circle-img" src="https://blackhistorywall.files.wordpress.com/2010/02/picture-device-independent-bitmap-119.jpg" alt="avatar_img" />
+          </div>
+          <div class="bottom">
+            <p class="info"><a href="<%= email %>"><%= email %></a></p>
+            <p class="info">Contact</p>
+          </div>
+        </div>
+
+        <form action="/new" method="post">
+            <button name="button" class="btn btn-primary" value="new">Create new Blog</button>
+        </form>
+
+
+      </div>
+
+</div>
+
+
+<%- include('partials/footer'); -%>

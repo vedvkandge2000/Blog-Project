@@ -1,0 +1,118 @@
+<%- include('partials/header'); -%>
+
+
+
+  <div class="row justify-content-center">
+
+      <!-- Post Content Column -->
+      <div class="col-lg-8">
+
+        <!-- Title -->
+        <h1 class="mt-4"><%= titleContent %></h1>
+
+        <!-- Author -->
+        <p class="lead">
+          by
+          <a href="#">Start Bootstrap</a>
+        </p>
+
+        <hr>
+
+        <!-- Date/Time -->
+        <p>Posted on January 1, 2019 at 12:00 PM</p>
+
+        <hr>
+
+
+        <!-- Preview Image -->
+        <img  alt="Post_Img" class="img-fluid rounded" src=<%= img %> >
+
+        <hr>
+
+        <!-- Post Content -->
+        <p class="lead"><%= bodyContent %></p>
+
+        <hr>
+
+
+        <hr>
+        <!-- Comments Form -->
+        <div class="card my-4">
+          <h5 class="card-header">Leave a Comment:</h5>
+          <div class="card-body">
+            <form>
+              <div class="form-group">
+                <textarea class="form-control" rows="3"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Single Comment -->
+        <div class="media mb-4">
+          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+          <div class="media-body">
+            <h5 class="mt-0">Commenter Name</h5>
+            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+          </div>
+        </div>
+
+        <!-- Comment with nested comments -->
+
+      </div>
+      <!-- Sidebar Widgets Column -->
+      <div class="col-md-4">
+
+        <!-- Search Widget -->
+        <div class="card my-4 card-2">
+          <div class="top-2">
+          <h5 class="name">Search</h5>
+          </div>
+          <div class="card-body">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search for...">
+              <span class="input-group-btn">
+                <button class="btn btn-secondary" type="button">Go!</button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Widget -->
+
+
+            <div class="card-1">
+              <div class="top">
+                <h2 class="name">Profile Name</h2>
+                <img class="circle-img" src="https://blackhistorywall.files.wordpress.com/2010/02/picture-device-independent-bitmap-119.jpg" alt="avatar_img" />
+              </div>
+              <div class="bottom">
+                <p class="info">Email</p>
+                <p class="info">Contact</p>
+              </div>
+            </div>
+
+
+
+        <!-- Share Widget -->
+        <div class="card my-4 card-2">
+          <div class="top-2">
+            <h5 class="name" >Share</h5>
+          </div>
+          <div class="card-body">
+            <a href="www.linkdin.com"><i class="fab fa-linkedin fa-2x icon"></i></a>
+            <a href="www.gmail.com"> <i class="fas fa-envelope fa-2x icon"></i></a>
+            <a href="www.whatsapp.com"><i class="fab fa-whatsapp fa-2x icon"></i></a>
+          </div>
+        </div>
+
+
+
+      </div>
+
+    </div>
+    <!-- /.row -->
+
+
+<%- include('partials/footer'); -%>
