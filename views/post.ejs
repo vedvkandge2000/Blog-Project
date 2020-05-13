@@ -45,9 +45,11 @@
         <div class="card my-4">
           <h5 class="card-header">Leave a Comment:</h5>
           <div class="card-body">
-            <form>
+            <form action="/comment" method="post">
               <div class="form-group">
-                <textarea class="form-control" rows="3"></textarea>
+                <textarea class="form-control" rows="3" name="comment"></textarea>
+                <input type="hidden" name="postId" value="<%= postId %>">
+                <input type="hidden" name="userId" value="<%= creatorId %>">
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>
@@ -56,11 +58,14 @@
 
         <!-- Single Comment -->
         <div class="media mb-4">
-          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
           <div class="media-body">
-            <h5 class="mt-0">Commenter Name</h5>
-            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+            <% comments.forEach(function(comment) { %>
+              <h5 class="mt-0"><%= comment.name %></h5>
+              <%= comment.content %>
+              <hr>
+            <% }) %>
           </div>
+
         </div>
 
         <!-- Comment with nested comments -->

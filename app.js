@@ -12,9 +12,9 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require('mongoose-findorcreate')
 
 
+var ObjectId = mongoose.Schema.ObjectId;
 
-
-const aboutContent = "Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Non diam phasellus vestibulum lorem sed. Platea dictumst quisque sagittis purus sit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Mauris in aliquam sem fringilla. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Amet massa vitae tortor condimentum lacinia quis vel eros. Enim ut tellus elementum sagittis vitae. Mauris ultrices eros in cursus turpis massa tincidunt dui.";
+const aboutContent = "Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Non diam phasellus vestibulum lorem sed. Platea dictumst quisque sagittis purus sit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Mauris in aliquam sem fringilla. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Amet massa vitae tortor condimentum lacinia quis vel eros. Enim ut tellus elementum sagittis   vitae. Mauris ultrices eros in cursus turpis massa tincidunt dui.";
 const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
 
 const app = express();
@@ -37,13 +37,34 @@ app.use(passport.session());
 mongoose.connect("mongodb+srv://admin-vedant:"+process.env.PASSWORD+"@cluster0-pppat.mongodb.net/blogDB", { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false} );
 mongoose.set('useCreateIndex', true);
 
-const postSchema = new mongoose.Schema({
-  title: String,
-  imgUrl: String,
+const commentSchema = new mongoose.Schema({
+  name: String,
   content: String
 });
 
-const Post = mongoose.model("Post",postSchema);
+const Comment = mongoose.model("Comment",commentSchema)
+
+const postSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    createIndexes: true
+  },
+  imgUrl:{
+    type: String,
+    createIndexes: true
+  },
+  content: {
+    type: String,
+    createIndexes: true
+  },
+  creator: {
+    type: mongoose.Schema.ObjectId,
+     ref: 'userSchema',
+     createIndexes: true
+   },
+  comments:[commentSchema]
+});
+
 
 const userSchema = new mongoose.Schema( {
   username:  {
@@ -62,7 +83,7 @@ const userSchema = new mongoose.Schema( {
 });
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
-
+const Post = mongoose.model("Post",postSchema);
 
 const User = mongoose.model("User", userSchema);
 
@@ -81,7 +102,7 @@ passport.deserializeUser(function(id, done) {
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "https://safe-dawn-50975.herokuapp.com/auth/google/Blogging",
+    callbackURL: "http://localhost:3000/auth/google/Blogging",
   },
   function(accessToken, refreshToken, profile, cb) {
     User.findOrCreate({ googleId: profile.id, username:profile.emails[0].value }, function (err, user) {
@@ -93,6 +114,14 @@ passport.use(new GoogleStrategy({
 
 app.get("/",function(req,res) {
   res.render("start");
+});
+
+app.get("/myBlog",function(req,res) {
+  if(req.isAuthenticated()){
+      res.redirect("/myBlogs/"+req.user.id);
+  }else {
+    res.redirect("/login");
+  }
 })
 
 app.get("/auth/google",
@@ -116,18 +145,24 @@ app.get("/register",function(req,res) {
 
 app.get("/home",function(req,res) {
 
-  Post.find(function(err, foundPost) {
-      if(err){
-        console.log(err);
-      }else{
-        res.render("home",
-        {
-          posts:foundPost,
-          userId: req.user.id,
-          email: req.user.username,
-        });
-      }
-  })
+  if(req.isAuthenticated()){
+    Post.find(function(err, foundPost) {
+        if(err){
+          console.log(err);
+        }else{
+          res.render("home",
+          {
+            posts:foundPost,
+            userId: req.user.id,
+            email: req.user.username,
+          });
+        }
+    })
+  }else {
+    res.redirect("/login");
+  }
+
+
 });
 
 app.get("/logout",function(req,res) {
@@ -135,9 +170,32 @@ app.get("/logout",function(req,res) {
   res.redirect("/");
 });
 
+
+app.get("/posts/:postId", function(req,res) {
+  const requestedId = req.params.postId;
+  const pageName = req.body.button;
+
+  Post.findOne({_id: requestedId}, function(err, foundPost){
+      // if (err) {
+      //   console.log(err);
+      // }else {
+        //console.log(foundPost);
+        if(pageName === "home"){
+          res.render("allPosts",{titleContent:foundPost.title, bodyContent:foundPost.content, postId:requestedId, creatorId:foundPost.creator ,img:foundPost.imgUrl, comments:foundPost.comments});
+        }
+        else if(pageName === "myBlogs"){
+          res.render("post",{titleContent:foundPost.title, bodyContent:foundPost.content, postId:requestedId, creatorId:foundPost.creator ,img:foundPost.imgUrl, comments:foundPost.comments});
+        }
+        else{
+          res.render("allPosts",{titleContent:foundPost.title, bodyContent:foundPost.content, postId:requestedId, creatorId:foundPost.creator ,img:foundPost.imgUrl, comments:foundPost.comments});
+        }
+      //}
+   });
+});
 app.post("/posts/:postId",function(req,res) {
   const requestedId = req.params.postId;
   const pageName = req.body.button;
+
 
   // console.log(pageName);
   // User.findOne({_id: req.user.id}, function(err,foundUser) {
@@ -163,10 +221,10 @@ app.post("/posts/:postId",function(req,res) {
       // }else {
         //console.log(foundPost);
         if(pageName === "home"){
-          res.render("allPosts",{titleContent:foundPost.title, bodyContent:foundPost.content, postId:requestedId, img:foundPost.imgUrl});
+          res.render("allPosts",{titleContent:foundPost.title, bodyContent:foundPost.content, postId:requestedId, creatorId:foundPost.creator ,img:foundPost.imgUrl, comments:foundPost.comments});
         }
         else if(pageName === "myBlogs"){
-          res.render("post",{titleContent:foundPost.title, bodyContent:foundPost.content, postId:requestedId, img:foundPost.imgUrl});
+          res.render("post",{titleContent:foundPost.title, bodyContent:foundPost.content, postId:requestedId, creatorId:foundPost.creator ,img:foundPost.imgUrl, comments:foundPost.comments});
         }
       //}
    });
@@ -273,7 +331,8 @@ app.post("/edit",function(req,res) {
           const updatedPost = new Post({
             title:req.body.title,
             imgUrl:req.body.img,
-            content:req.body.post
+            content:req.body.post,
+            creator: req.user.id
           });
           User.findOne({_id: req.user.id}, function(err, found) {
               found.posts.push(updatedPost);
@@ -295,20 +354,47 @@ app.post("/edit",function(req,res) {
                 }
               });
             });
-
-
-
-
     }
   });
 });
+
+app.post("/comment",function(req,res) {
+  const newComment = new Comment({
+    name: req.user.username,
+    content: req.body.comment
+  });
+
+  Post.findOne({_id: req.body.postId}, function(err,found) {
+    found.comments.push(newComment);
+    found.save(function(err) {
+      res.redirect("/posts/"+req.body.postId);
+    })
+  });
+
+  // User.findOne({_id: req.body.userId}, function(err,foundUser) {
+  //   console.log(foundUser.posts);
+  // const founded = foundUser.posts.filter(function(post) {
+  //   return(post._id === req.body.postId);
+  // })
+  // });
+  // console.log(founded);
+  // founded[0].comments.push(newComment);
+  // founded[0].save(function(err) {
+  //   if(!err){
+  //     res.redirect("/posts/"+req.body.userId+"/"+req.body.postId);
+  //   }
+  // })
+
+
+})
 
 app.post("/compose",function(req,res) {
 
   const newPost = new Post({
     title:req.body.title,
     imgUrl:req.body.img,
-    content:req.body.post
+    content:req.body.post,
+    creator: req.user.id
   });
 
   User.findOne({_id: req.user.id}, function(err, found) {
@@ -332,6 +418,7 @@ let port = process.env.PORT;
 if (port == null || port == "") {
   port = 3000;
 }
+
 
 
 app.listen(port, function() {
