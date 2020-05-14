@@ -9,7 +9,8 @@ const session = require('express-session');
 const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const findOrCreate = require('mongoose-findorcreate')
+const findOrCreate = require('mongoose-findorcreate');
+
 
 
 var ObjectId = mongoose.Schema.ObjectId;
@@ -62,7 +63,13 @@ const postSchema = new mongoose.Schema({
      ref: 'userSchema',
      createIndexes: true
    },
+   creatorName: {
+     type: String,
+     createIndexes: true
+   },
   comments:[commentSchema]
+},{
+  timestamps: true
 });
 
 
@@ -79,7 +86,6 @@ const userSchema = new mongoose.Schema( {
     type: String,
     createIndexes: true
   },
-  posts: [postSchema]
 });
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
@@ -181,13 +187,40 @@ app.get("/posts/:postId", function(req,res) {
       // }else {
         //console.log(foundPost);
         if(pageName === "home"){
-          res.render("allPosts",{titleContent:foundPost.title, bodyContent:foundPost.content, postId:requestedId, creatorId:foundPost.creator ,img:foundPost.imgUrl, comments:foundPost.comments});
+          res.render("allPosts",{
+            titleContent:foundPost.title,
+            bodyContent:foundPost.content,
+            postId:requestedId,
+            postDate:foundPost.updatedAt,
+            creatorId:foundPost.creator,
+            img:foundPost.imgUrl,
+            comments:foundPost.comments,
+            postedBy: foundPost.creatorName
+          });
         }
         else if(pageName === "myBlogs"){
-          res.render("post",{titleContent:foundPost.title, bodyContent:foundPost.content, postId:requestedId, creatorId:foundPost.creator ,img:foundPost.imgUrl, comments:foundPost.comments});
+          res.render("post",{
+            titleContent:foundPost.title,
+            bodyContent:foundPost.content,
+            postId:requestedId,
+            postDate:foundPost.updatedAt,
+            creatorId:foundPost.creator,
+            img:foundPost.imgUrl,
+            comments:foundPost.comments,
+            postedBy: foundPost.creatorName
+          });
         }
         else{
-          res.render("allPosts",{titleContent:foundPost.title, bodyContent:foundPost.content, postId:requestedId, creatorId:foundPost.creator ,img:foundPost.imgUrl, comments:foundPost.comments});
+          res.render("allPosts",{
+            titleContent:foundPost.title,
+            bodyContent:foundPost.content,
+            postId:requestedId,
+            postDate:foundPost.updatedAt,
+            creatorId:foundPost.creator,
+            img:foundPost.imgUrl,
+            comments:foundPost.comments,
+            postedBy: foundPost.creatorName
+          });
         }
       //}
    });
@@ -221,10 +254,28 @@ app.post("/posts/:postId",function(req,res) {
       // }else {
         //console.log(foundPost);
         if(pageName === "home"){
-          res.render("allPosts",{titleContent:foundPost.title, bodyContent:foundPost.content, postId:requestedId, creatorId:foundPost.creator ,img:foundPost.imgUrl, comments:foundPost.comments});
+          res.render("allPosts",{
+            titleContent:foundPost.title,
+            bodyContent:foundPost.content,
+            postId:requestedId,
+            postDate:foundPost.updatedAt,
+            creatorId:foundPost.creator,
+            img:foundPost.imgUrl,
+            comments:foundPost.comments,
+            postedBy: foundPost.creatorName
+          });
         }
         else if(pageName === "myBlogs"){
-          res.render("post",{titleContent:foundPost.title, bodyContent:foundPost.content, postId:requestedId, creatorId:foundPost.creator ,img:foundPost.imgUrl, comments:foundPost.comments});
+          res.render("post",{
+            titleContent:foundPost.title,
+            bodyContent:foundPost.content,
+            postId:requestedId,
+            postDate:foundPost.updatedAt,
+            creatorId:foundPost.creator,
+            img:foundPost.imgUrl,
+            comments:foundPost.comments,
+            postedBy: foundPost.creatorName
+          });
         }
       //}
    });
@@ -233,15 +284,19 @@ app.post("/posts/:postId",function(req,res) {
 app.get("/myBlogs/:userId",function(req,res) {
   const requestedUserId = req.params.userId;
   // console.log(requestedUserId);
-  User.findOne({_id: requestedUserId}, function(err, found) {
+  Post.find({creator:requestedUserId},function(err,foundPosts) {
+    // console.log(foundPosts);
     if(err){
     console.log(err);
   }else {
-    if(found){
-      res.render("myBlogs", {posts: found.posts, userId:requestedUserId})
+    if(foundPosts){
+      res.render("myBlogs", {posts: foundPosts, userId:requestedUserId})
     }
   }
 });
+//   User.findOne({_id: requestedUserId}, function(err, found) {
+//
+// });
 });
 
 app.post("/register", function(req,res) {
@@ -305,15 +360,15 @@ app.post("/post",function(req,res) {
     }
   else if (action === "delete") {
 
-    User.findOneAndUpdate({_id:req.user.id}, {$pull: {posts: {_id: req.body.id}}}, function(err, foundUser) {
-      if(!err){
+    // User.findOneAndUpdate({_id:req.user.id}, {$pull: {posts: {_id: req.body.id}}}, function(err, foundUser) {
+      // if(!err){
         Post.findOneAndDelete({_id: req.body.id}, function(err) {
           if(!err){
             res.redirect("/myBlogs/"+req.user.id);
           }
-        })
-      }
-    });
+        });
+      // }
+    // });
 
     }
 });
@@ -322,40 +377,49 @@ app.post("/post",function(req,res) {
 
 app.post("/edit",function(req,res) {
 
-
-  User.findOneAndUpdate({_id:req.user.id}, {$pull: {posts: {_id: req.body.id}}},function(err) {
+  Post.findOneAndUpdate({_id:req.body.id}, {$set: {title:req.body.title,imgUrl:req.body.img,content:req.body.post,}}, function(err) {
     if(err){
       res.send(err);
     }else{
-
-          const updatedPost = new Post({
-            title:req.body.title,
-            imgUrl:req.body.img,
-            content:req.body.post,
-            creator: req.user.id
-          });
-          User.findOne({_id: req.user.id}, function(err, found) {
-              found.posts.push(updatedPost);
-              found.save(function(err) {
-                if(!err){
-                  // console.log(req.user.id);
-                  Post.findOneAndDelete({_id:req.body.id}, function(err) {
-                    if(!err){
-                      updatedPost.save(function(err) {
-                        if(err){
-                          console.log(err);
-                        }else {
-                          res.redirect("/myBlogs/"+req.user.id);
-                        }
-                      })
-                    }
-                  })
-
-                }
-              });
-            });
+      res.redirect("/myBlogs/"+req.user.id);
     }
-  });
+  })
+
+
+  // User.findOneAndUpdate({_id:req.user.id}, {$pull: {posts: {_id: req.body.id}}},function(err) {
+  //   if(err){
+  //     res.send(err);
+  //   }else{
+  //
+  //         const updatedPost = new Post({
+  //           title:req.body.title,
+  //           imgUrl:req.body.img,
+  //           content:req.body.post,
+  //           creator: req.user.id
+  //
+  //         });
+  //         User.findOne({_id: req.user.id}, function(err, found) {
+  //             found.posts.push(updatedPost);
+  //             found.save(function(err) {
+  //               if(!err){
+  //                 // console.log(req.user.id);
+  //                 Post.findOneAndDelete({_id:req.body.id}, function(err) {
+  //                   if(!err){
+  //                     updatedPost.save(function(err) {
+  //                       if(err){
+  //                         console.log(err);
+  //                       }else {
+  //                         res.redirect("/myBlogs/"+req.user.id);
+  //                       }
+  //                     })
+  //                   }
+  //                 })
+  //
+  //               }
+  //             });
+  //           });
+  //   }
+  // });
 });
 
 app.post("/comment",function(req,res) {
@@ -394,17 +458,18 @@ app.post("/compose",function(req,res) {
     title:req.body.title,
     imgUrl:req.body.img,
     content:req.body.post,
-    creator: req.user.id
+    creator: req.user.id,
+    creatorName: req.user.username
   });
 
-  User.findOne({_id: req.user.id}, function(err, found) {
-      found.posts.push(newPost);
-      found.save(function(err) {
-        if(!err){
-          // console.log(req.user.id);
-        }
-      });
-    })
+  // User.findOne({_id: req.user.id}, function(err, found) {
+  //     found.posts.push(newPost);
+  //     found.save(function(err) {
+  //       if(!err){
+  //         // console.log(req.user.id);
+  //       }
+  //     });
+  //   })
     newPost.save(function(err) {
       if(err){
         console.log(err);

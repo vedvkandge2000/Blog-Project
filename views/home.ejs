@@ -18,8 +18,8 @@
             <!-- <input type="hidden" name="pageName" value="home"> -->
           </div>
           <div class="card-footer text-muted">
-            Posted on January 1, 2017 by
-            <a href="#">Start Bootstrap</a>
+           <%= post.updatedAt %><br>
+            Posted By:<a href="#"><%= post.creatorName %></a>
           </div>
         </div>
 <% }) %>
@@ -42,7 +42,7 @@
           </div>
         </div>
         <!-- Profile Widget -->
-        <div class="card-1">
+        <!-- <div class="card-1">
           <div class="top">
             <h2 class="name">Profile Name</h2>
             <img class="circle-img" src="https://blackhistorywall.files.wordpress.com/2010/02/picture-device-independent-bitmap-119.jpg" alt="avatar_img" />
@@ -51,7 +51,7 @@
             <p class="info"><a href="<%= email %>"><%= email %></a></p>
             <p class="info">Contact</p>
           </div>
-        </div>
+        </div> -->
 
         <form action="/new" method="post">
             <button name="button" class="btn btn-primary" value="new">Create new Blog</button>

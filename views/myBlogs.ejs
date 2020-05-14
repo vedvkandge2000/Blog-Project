@@ -19,14 +19,16 @@
             <input type="hidden" name="pageName" value="myBlogs"> -->
           </div>
           <div class="card-footer text-muted">
-            Posted on January 1, 2017 by
-            <a href="#">Start Bootstrap</a>
+            <%= post.updatedAt %><br>
+            Posted By:<a href="#"><%= post.creatorName %></a>
           </div>
         </div>
 <% }) %>
 
 </div>
-
+<form action="/new" method="post">
+    <button name="button" class="btn btn-primary" value="new">Create new Blog</button>
+</form>
 
 
 
