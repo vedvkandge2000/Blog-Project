@@ -479,7 +479,7 @@ app.post("/compose",function(req,res) {
     })
 })
 
-let port = process.env.PORT;
+const port = process.env.PORT;
 if (port == null || port == "") {
   port = 3000;
 }
