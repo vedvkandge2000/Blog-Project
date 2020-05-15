@@ -108,7 +108,7 @@ passport.deserializeUser(function(id, done) {
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/Blogging",
+    callbackURL: "https://safe-dawn-50975.herokuapp.com/auth/google/Blogging",
   },
   function(accessToken, refreshToken, profile, cb) {
     User.findOrCreate({ googleId: profile.id, username:profile.emails[0].value }, function (err, user) {
