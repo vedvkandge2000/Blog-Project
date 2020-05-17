@@ -1,6 +1,7 @@
 # Blog-Project
 
 This is a Simple Blog Project By using node.js,express.js,ejs. The main features are user authentication and you can update the post.
+Also with great user authentication and password reset using gmail.
 
 ## Getting Started
 
@@ -53,7 +54,6 @@ nodemon app.js
 
 ### Coming features are
 
-* Adding comment section to the post
 * Deploying the website on heruko
 * Like and Dislike option to blog post.
 
